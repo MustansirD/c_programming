@@ -5,7 +5,7 @@
 #include<fcntl.h>//open
 #include<sys/file.h>//flock 
 
-#define SEQFILE "seqno"
+#define SEQFILE "num"
 #define MAXBUFF 100
 
 void myLock(int fd)
@@ -34,7 +34,7 @@ void myUnlock(int fd)
 
 int main()
 {
-  int fd,i,n,pid,seqno;
+  int fd,i,n,pid,num;
   char buff[MAXBUFF + 1];
 
   pid = getpid();
@@ -59,17 +59,17 @@ int main()
     }
     buff[n] = '\0';
 
-    n = sscanf(buff,"%d\n",&seqno);
+    n = sscanf(buff,"%d\n",&num);
     if( n != 1)
     {
       printf("sscanf error\n");
       exit(1);
     }
 
-    printf("pid=[%d],seq#=[%d]\n",pid,seqno);
+    printf("pid=[%d],num=[%d]\n",pid,num);
 
-    seqno++; /* increment the sequence number */
-    sprintf(buff,"%03d\n",seqno);
+    num++; /* increment the sequence number */
+    sprintf(buff,"%03d\n",num);
     n = strlen(buff);
     lseek(fd,0L,0);
     if ( write(fd,buff,n) != n)
